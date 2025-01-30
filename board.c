@@ -90,42 +90,32 @@ int count_neighbors(char **board, int y, int x, int width, int height) {
   return count;  
 }
 
-// resize screen
-///////////////////////////////////////////////////
-void handle_screen_resize(char **board, int *height, int *width) {
 
+void handle_screen_resize(char ***board, int *height, int *width) {
   int newHeight, newWidth;
-
   getmaxyx(stdscr, newHeight, newWidth);
 
-  // check if screen was actually resized
-  // theoretically not necessary, but since the function runs in the game loop
-  if(newHeight != *height || newWidth != *width) {
-    handle_board_resize(board, *height, *width, newHeight, newWidth);
+  // because of game loop
+  if (newHeight != *height || newWidth != *width) {
 
-    // change height and width values
-    *height = newHeight;
-    *width = newWidth;
-  
-        
-  }
-}
+    char **newBoard = define_board_size(newHeight, newWidth);
 
-// resize board
-////////////////////////////////////////////////////////////////////
-char **handle_board_resize(char **board, int height, int width, int newHeight, int newWidth) {
+      // copy cells alive
+      for (int row = 0; row < *height && row < newHeight; row++) {
+        for (int col = 0; col < *width && col < newWidth; col++) {
+          newBoard[row][col] = *board[row][col]; 
+        }
+      }
 
-  // define newBoard
-  char **newBoard = define_board_size(newHeight, newWidth);
+      // free old board
+      destroy_board(*board, *height);
 
-  // compare row/col size with BOTH heights/widths (so you can resize in both directions)
-  for(int row = 0; row < newHeight && row < height; row++) {
-    for(int col = 0; col < newWidth && col < width; col++) {
-      newBoard[row][col] = board[row][col];
+      // update hight and width
+      *height = newHeight;
+      *width = newWidth;
+
+      // reassign board
+      *board = newBoard;
+
     }
-  }
-
-  destroy_board(board, height);
-  
- return newBoard; 
 }

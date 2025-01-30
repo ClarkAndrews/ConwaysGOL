@@ -1,4 +1,8 @@
 #include "board.h"
+
+void run_game_of_live(char **board, int height, int width);
+
+
 int main() {
   
   int key, x = 0, y = 0;
@@ -19,7 +23,7 @@ int main() {
     key = getch();
 
     if(key == KEY_RESIZE) {
-      handle_screen_resize(board, &height, &width);
+      handle_screen_resize(&board, &height, &width);
       // dont know if i can implement in time
     // move left
     } else if(key == KEY_LEFT) {
