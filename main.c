@@ -1,8 +1,5 @@
 #include "board.h"
 int main() {
-
-  char *locale = setlocale(LC_CTYPE, NULL);
-  wchar_t full_block = L'\u2588';
   
   int key, x = 0, y = 0;
   int height, width;
@@ -59,12 +56,13 @@ int main() {
     key = 0;  
   }
 
+  destroy_board(board, height);
   endwin();
   return 0;
 }
 
-
-
+// game loop
+//////////////////////////////////////////////////////
 void run_game_of_live(char **board, int height, int width) {
 
   // make getch()  non-blocking
